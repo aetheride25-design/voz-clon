@@ -1,0 +1,14 @@
+.venv/
+node_modules/
+dist/
+__pycache__/
+*.tsbuildinfo
+
+# Audios personales (referencias de voz y salidas)
+ref/
+*.wav
+
+# Configuración local y notas privadas
+.claude/
+.env
+docs/

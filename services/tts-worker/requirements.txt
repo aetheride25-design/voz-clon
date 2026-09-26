@@ -1,0 +1,5 @@
+# Instala PyTorch (torch + torchaudio) ANTES de este archivo, segun tu GPU. Ver README.
+qwen-tts==0.1.1
+fastapi==0.141.1
+uvicorn==0.52.4
+python-multipart==0.0.32
