@@ -14,7 +14,7 @@ Nada sale de tu computadora.
 
 Si ya lo instalaste (ver [Instalación](#instalación)), para usarlo:
 
-- **Windows:** doble clic en `start.bat`.
+- **Windows:** doble clic en `start.bat` (o `start-liviano.bat` si la tarjeta de video tiene poca memoria).
 - **Linux/macOS:** `./start.sh`
 
 Se abre el worker (carga el modelo) y el navegador en **http://localhost:5173**. Espera a que la cabecera diga
@@ -27,7 +27,7 @@ Se abre el worker (carga el modelo) y el navegador en **http://localhost:5173**.
 | Python | 3.12 (obligatorio para AMD en Windows; recomendado para el resto) |
 | Node.js + pnpm | Node 20 o superior, `npm i -g pnpm` |
 | ffmpeg | en el PATH. Decodifica la referencia (AAC, M4A, MP3, WAV, OGG) |
-| GPU NVIDIA | 8 GB de VRAM o más. El modelo ocupa ~4.5 GB en bf16 |
+| GPU NVIDIA | **4 GB de VRAM funciona** (probado en una laptop de 4 GB); 8 GB o más va más rápido. Ver [GPU con poca memoria](#gpu-con-poca-memoria-4-gb) |
 | GPU AMD (Windows) | Windows 11, driver Adrenalin 26.2.2 o superior y una de las GPU de la lista de AMD (ver paso 2) |
 | CPU | 16 GB de RAM. Funciona, pero tarda minutos por frase |
 | Disco | ~5 GB para el modelo (se descarga solo la primera vez) |
@@ -128,6 +128,7 @@ Variables de entorno del worker (opcionales):
 
 | Variable | Valores | Por defecto |
 |---|---|---|
+| `TTS_MODEL` | `Qwen/Qwen3-TTS-12Hz-1.7B-Base`, `Qwen/Qwen3-TTS-12Hz-0.6B-Base` | 1.7B |
 | `TTS_DEVICE` | `cuda:0`, `cpu` | GPU si hay |
 | `TTS_DTYPE` | `bfloat16`, `float16`, `float32` | bf16 en NVIDIA, fp16 en AMD, fp32 en CPU |
 | `TTS_ATTN` | `flash_attention_2`, `sdpa`, `eager` | flash-attn en NVIDIA si está instalado; si no, sdpa |
@@ -136,6 +137,15 @@ Variables de entorno del worker (opcionales):
 
 Nota AMD: sin `MIOPEN_FIND_MODE=FAST`, MIOpen busca kernels de convolución para cada longitud de audio nueva y el
 decodificador tarda ~25 s por generación. El worker lo fija solo; no hace falta tocarlo.
+
+### GPU con poca memoria (4 GB)
+
+Funciona con el modelo normal (1.7B): en Windows, si la VRAM no alcanza, el driver de NVIDIA usa parte de la RAM y
+sigue funcionando, solo que más lento. No hace falta cambiar nada; instala igual que con cualquier GPU NVIDIA.
+
+Si da error de memoria (`CUDA out of memory`) o va demasiado lento, usa el modelo pequeño (0.6B, 1.8 GB). Un poco
+menos de parecido, pero cabe de sobra: abre **`start-liviano.bat`** en lugar de `start.bat`
+(en Linux/macOS: `TTS_MODEL=Qwen/Qwen3-TTS-12Hz-0.6B-Base ./start.sh`). La primera vez descarga ese modelo.
 
 ## Rendimiento medido
 

@@ -22,7 +22,8 @@ import soundfile as sf  # noqa: E402
 import torch  # noqa: E402
 from qwen_tts import Qwen3TTSModel  # noqa: E402
 
-MODEL_ID = "Qwen/Qwen3-TTS-12Hz-1.7B-Base"
+# 1.7B por defecto (mejor calidad). En GPUs pequenas: TTS_MODEL=Qwen/Qwen3-TTS-12Hz-0.6B-Base.
+MODEL_ID = os.environ.get("TTS_MODEL", "Qwen/Qwen3-TTS-12Hz-1.7B-Base")
 LANGUAGES = {"es": "Spanish", "en": "English"}
 DECODE_SR = 24000  # frecuencia a la que se normaliza la referencia (la del modelo)
 # Del config del tokenizer 12Hz: 1 frame = 1920 muestras a 24 kHz (12.5 frames/s), 16 codigos por frame.
